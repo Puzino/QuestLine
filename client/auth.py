@@ -17,5 +17,6 @@ def login(username: str, password: str) -> str | None:
     data = {"username": username, "password": password}
     response = requests.post(f"{SERVER_URL}/auth/login", data=data)
     if response.status_code == 200:
-        return f"Bearer {response.json()["access_token"]}"
+        token = response.json().get("access_token")
+        return f"Bearer {token}"
     return None
