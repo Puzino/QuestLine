@@ -6,7 +6,8 @@ __pycache__/
 .DS_Store
 # C extensions
 *.so
-
+test.py
+database.json
 # Distribution / packaging
 .Python
 build/
