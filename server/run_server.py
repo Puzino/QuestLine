@@ -1,17 +1,28 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI
 
+from database.connection import Settings
 from routes.auth import auth_router
 from routes.game import game_router
 
-app = FastAPI()
+
+@asynccontextmanager
+async def init_database(app: FastAPI):
+    await settings.initialize_database()
+    yield
+
+
+app = FastAPI(lifespan=init_database)
+settings = Settings()
 app.include_router(game_router, prefix='/game', tags=['Game'])
 app.include_router(auth_router, prefix='/auth', tags=['Auth'])
 
 
-@app.get("/")
-async def root():
-    return {"Hello": "World"}
+@app.get("/ping")
+async def ping():
+    return {"message": "Pong"}
 
 
 if __name__ == "__main__":
