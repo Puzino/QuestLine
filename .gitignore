@@ -6,8 +6,12 @@ __pycache__/
 .DS_Store
 # C extensions
 *.so
+
+# Self ignore
 test.py
 database.json
+redis_data/
+
 # Distribution / packaging
 .Python
 build/

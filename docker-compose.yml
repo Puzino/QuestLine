@@ -1,0 +1,20 @@
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
+    command: [ "redis-server", "--appendonly", "yes" ]
+
+  redis_commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis_commander
+    restart: always
+    platform: linux/amd64
+    environment:
+      - REDIS_HOST=redis
+    ports:
+      - "8081:8081"
