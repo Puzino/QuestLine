@@ -4,14 +4,15 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 
 from models.auth import User
+from models.chat import Message
 
 
-class Settings:
+class SettingsDB:
     DATABASE_URL: str = config("DATABASE_URL")
 
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
-        await init_beanie(database=client.get_default_database(), document_models=[User])
+        await init_beanie(database=client.get_default_database(), document_models=[User, Message])
 
 
 class Database:
@@ -24,6 +25,12 @@ class Database:
 
     async def get(self, _id: str):
         doc = await self.model.get(_id)
+        if doc:
+            return doc
+        return False
+
+    async def get_by_name(self, username: str):
+        doc = await self.model.get(username)
         if doc:
             return doc
         return False
