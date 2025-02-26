@@ -14,6 +14,9 @@ user_database = Database(User)
 
 @auth_router.post('/register')
 async def sing_new_user(user: User) -> dict:
+    if len(user.password) < 8:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            detail="Password must be at least 8 characters long.")
     user_exist = await User.find_one(User.username == user.username)
     if user_exist:
         raise HTTPException(
